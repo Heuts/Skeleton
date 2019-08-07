@@ -2,15 +2,15 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { publishReplay, refCount, map } from 'rxjs/operators';
-import { ConfigDto } from '../DTO/config.dto';
+import { Config } from '../DTO/config.dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfigService {
   private webServerUrl: string;
-  private cachedConfig: ConfigDto;
-  private config$: Observable<ConfigDto>;
+  private cachedConfig: Config;
+  private config$: Observable<Config>;
 
   constructor(
     @Inject('BASE_URL') private baseUrl: string,
@@ -35,18 +35,18 @@ export class ConfigService {
     return this.config$.toPromise().then(c => (this.cachedConfig = c));
   }
 
-  CreateConfig$(): Observable<ConfigDto> {
-    return this.http.get<ConfigDto>(`${this.webServerUrl}/api/config`).pipe(
+  CreateConfig$(): Observable<Config> {
+    return this.http.get<Config>(`${this.webServerUrl}/api/config`).pipe(
       publishReplay(1),
       refCount()
     );
   }
 
-  getConfig$(): Observable<ConfigDto> {
+  getConfig$(): Observable<Config> {
     return this.config$;
   }
 
-  getCachedConfig(): ConfigDto {
+  getCachedConfig(): Config {
     return this.cachedConfig;
   }
 

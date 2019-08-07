@@ -18,9 +18,9 @@ namespace Web.Controllers.Configuration
         }
 
         [HttpGet]
-        public Config Index()
+        public ConfigDto Index()
         {
-            return new Config
+            return new ConfigDto
             {
                 ApiServerUrl = config["ApiServer:SchemeAndHost"],
             };

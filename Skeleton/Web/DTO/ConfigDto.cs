@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Web.DTO
 {
-    public class Config
+    public class ConfigDto
     {
         public string ApiServerUrl;
     }
