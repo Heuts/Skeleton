@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Web.DTO;
 
 namespace Web.Controllers.Configuration
 {
@@ -17,17 +18,12 @@ namespace Web.Controllers.Configuration
         }
 
         [HttpGet]
-        public WebConfig Index()
+        public Config Index()
         {
-            return new WebConfig
+            return new Config
             {
                 ApiServerUrl = config["ApiServer:SchemeAndHost"],
             };
-        }
-
-        public class WebConfig
-        {
-            public string ApiServerUrl;
         }
     }
 }
