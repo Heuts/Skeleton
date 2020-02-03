@@ -1,10 +1,10 @@
-## Opzetten webapplicatie met Web API en Angular client in ASP.NET Core
+# Opzetten webapplicatie met Web API en Angular client in ASP.NET Core
 
-### Inleiding
+## Inleiding
 In deze handleiding zullen we een ASP.NET Core Api koppelen aan een Web Angular 7+ front-end. In dit voorbeeld is gebruik gemaakt van ASP .NET Core 2.2 API en een Angular 7 front-end. Voor het aanmaken van projecten is Visual Studio 2019 16.2.0 gebruikt en voor de code is Visual Studio Code 1.36.1 gebruikt. Ook moet node.js geïnstalleerd zijn, in dit voorbeeld is 10.16.2 geïnstalleerd.
 
 
-#### Aanmaken projecten
+### Aanmaken projecten
 1.	Maak een nieuw project aan in Visual Studio  Create a new project
 2.	Selecteer ASP.NET Core Web Application en klik Next
 3.	Kies een naam voor het project en een naam voor de solution en klik Create
@@ -19,7 +19,7 @@ In deze handleiding zullen we een ASP.NET Core Api koppelen aan een Web Angular 
 12.	Je hebt nu beide projecten aangemaakt
 
 
-#### Appsettings
+### Appsettings
 De variabelen zoals de url van de api en de web worden opgeslagen in de appsettings van de projecten. In deze sectie zullen we deze variabelen toevoegen. In de appsettings.development zetten we de localhost urls. In de “normale” appsettings zetten we de We zetten de value van deze variabele op “TOSET”, omdat deze value tijdens de release in Azure DevOps wordt bepaalt.
 
 1.	Rechtermuisknop op het project voor de Web  Properties  Debug  Selecteer hier Enable SSL en kopieer het adres wat hier rechts van verschijnt.
@@ -53,7 +53,7 @@ We zetten de value van deze variabele op “TOSET”, omdat deze value tijdens d
   }
 ```
 
-#### Instellen CORS
+### Instellen CORS
 Om de Web toestemming te geven om de API aan te roepen, moeten we de CORS(Cross-Origin Resource Sharing) implementeren in de API. Je kan hier meer over CORS lezen: https://www.html5rocks.com/en/tutorials/cors/ 
 Ook wordt hier de value uit de appsettings opgehaald, zodat hij de juiste value gebruikt, afhankelijk van in welke omgeving je hem opstart (development of Azure release)
 1.	Hiervoor gaan we de Startup.cs klasse in de API en voegen we het onderstaande stukje code toe aan de ConfigureServices() methode:
@@ -74,7 +74,7 @@ services.AddCors(options =>
 app.UseCors("AllowSpecificOrigin");
 ```
 
-#### Testen connectie
+### Testen connectie
 Als alles goed is gegaan, kunnen de Web en de API nu communiceren. Dit kunnen we testen door de automatisch gecreëerde ValuesController.cs in de API vanuit de Web aan te roepen.
 1.	We kunnen in de automatisch gecreëerde home component dit doen. Ga naar de file home.component.ts in de WEB (Web/src/app/home) en vervang de code met het onderstaande:
 
@@ -107,7 +107,7 @@ export class HomeComponent {
 We kunnen nu het programma runnen (API + WEB) en zullen de values (“value1, value2”) vanuit de ValuesController uit de API in de home component zien 😊.
 
 
-#### Injection token voor API_BASE_URL
+### Injection token voor API_BASE_URL
 We kunnen de url voor de API het beste via injection token ophalen, omdat de API url geen runtime representation heeft (hij heeft in de azure omgeving een andere waarde dan in de local omgeving).
 1.	Hiervoor voegen we een nieuwe folder injection-tokens aan onze angular web app toe met daarin de file api-base-url-token.ts. Deze typescript file ziet er als volgt uit:
 ```typescript
@@ -213,7 +213,7 @@ providers: [
 ```
 
 
-#### ConfigController
+### ConfigController
 We moeten nu in de Controllers map in de Web een C# controller toevoegen en een C# klasse waarvan de properties gelijk zijn aan de ConfigDto die we in de vorige stap hebben gemaakt. 
 1.	De controller ziet er als volgt uit: 
 ```csharp
@@ -248,7 +248,7 @@ public class ConfigDto
 **LET OP:** in projecten die .NET Core 3.0+ gebruik maken moet je bij deze property een getter en setter aanmaken  public string ApiServerUrl {get; set;}
 
 
-#### Testen nieuwe connectie
+### Testen nieuwe connectie
 We hebben er nu voor gezorgd dat de web de url van api kan ophalen via ConfigController, config-service en de injection token. We kunnen dit nu gaan testen door onze home component hier op aan te passen. Verander de home.component.ts file zodat hij er als volgt uit ziet. 
 ```typescript
 import { Component, Inject } from '@angular/core';
