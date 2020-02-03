@@ -194,7 +194,7 @@ export function getApiBaseUrlFactory(configService: ConfigService) {
   return configService.getCachedConfig().apiServerUrl;
 }
 ```
-Ook voegen we in de `app.module.ts` onder `providers` het volgende toe: 
+5.	Ook voegen we in de `app.module.ts` onder `providers` het volgende toe: 
 ```typescript
 providers: [
     ConfigService,
