@@ -5,13 +5,13 @@ In deze handleiding zullen we een ASP.NET Core Api koppelen aan een Web Angular 
 
 
 ### Aanmaken projecten
-1.	Maak een nieuw project aan in Visual Studio  Create a new project
+1.	Maak een nieuw project aan in Visual Studio => Create a new project
 2.	Selecteer ASP.NET Core Web Application en klik Next
 3.	Kies een naam voor het project en een naam voor de solution en klik Create
 4.	Zorg dat bovenin het scherm .NET Core en de meest recent stable versie van ASP.NET Core geselecteerd zijn.
 5.	Selecteer voor de API van de applicatie API, selecteer Configure for HTTPS en klik Create
 6.	Je hebt nu de API gemaakt
-7.	Klik nu met rechtermuisknop op de solution in Solution Explorer en ga naar Add  New Project
+7.	Klik nu met rechtermuisknop op de solution in Solution Explorer en ga naar Add => New Project
 8.	Selecteer ASP.NET Core Web Application en klik Next
 9.	Kies de naam van de Web(Front-End) van de applicatie en klik Create
 10.	Zorg dat bovenin het scherm .NET Core en de meest recent stable versie van ASP.NET Core geselecteerd zijn.
@@ -22,31 +22,31 @@ In deze handleiding zullen we een ASP.NET Core Api koppelen aan een Web Angular 
 ### Appsettings
 De variabelen zoals de url van de api en de web worden opgeslagen in de appsettings van de projecten. In deze sectie zullen we deze variabelen toevoegen. In de appsettings.development zetten we de localhost urls. In de “normale” appsettings zetten we de We zetten de value van deze variabele op “TOSET”, omdat deze value tijdens de release in Azure DevOps wordt bepaalt.
 
-1.	Rechtermuisknop op het project voor de Web  Properties  Debug  Selecteer hier Enable SSL en kopieer het adres wat hier rechts van verschijnt.
-2.	Open de appsettings.Development.json van de API en voeg het volgende stukje code toe:
+1.	Rechtermuisknop op het project voor de Web => Properties => Debug => Selecteer hier Enable SSL en kopieer het adres wat hier rechts van verschijnt.
+2.	Open de `appsettings.Development.json` van de API en voeg het volgende stukje code toe:
 ```json
 "Web": {
     "SchemeAndHost": "{{ plak localhost van web hier }}"
   }
 ```
 
-3.	Open de appsettings.json van de API en voeg het volgende stukje code toe:
+3.	Open de `appsettings.json` van de API en voeg het volgende stukje code toe:
 ```json
 "Web": {
     "SchemeAndHost": "TOSET"
   }
 ```
-We zetten de value van deze variabele op “TOSET”, omdat deze value tijdens de release in Azure DevOps wordt bepaalt.
+We zetten de value van deze variabele op `TOSET`, omdat deze value tijdens de release in Azure DevOps wordt bepaalt.
 
-4.	Rechtermuisknop op het project van de API  Properties  Debug  Selecteer hier Enable SSL en kopieer het adres wat hier rechts van verschijnt.
+4.	Rechtermuisknop op het project van de API => Properties => Debug => Selecteer hier Enable SSL en kopieer het adres wat hier rechts van verschijnt.
 
-5.	Open de appsettings.Development.json van de Web en voeg het volgende stukje code toe:
+5.	Open de `appsettings.Development.json` van de Web en voeg het volgende stukje code toe:
 ```json
 "ApiServer": {
     "SchemeAndHost": "{{ plak adres van api hier }}"
   }
 ```
-6.	Open de appsettings.json van de Web en voeg het volgende stukje code toe:
+6.	Open de `appsettings.json` van de Web en voeg het volgende stukje code toe:
 ```json
 "ApiServer": {
     "SchemeAndHost": "TOSET"
@@ -56,7 +56,7 @@ We zetten de value van deze variabele op “TOSET”, omdat deze value tijdens d
 ### Instellen CORS
 Om de Web toestemming te geven om de API aan te roepen, moeten we de CORS(Cross-Origin Resource Sharing) implementeren in de API. Je kan hier meer over CORS lezen: https://www.html5rocks.com/en/tutorials/cors/ 
 Ook wordt hier de value uit de appsettings opgehaald, zodat hij de juiste value gebruikt, afhankelijk van in welke omgeving je hem opstart (development of Azure release)
-1.	Hiervoor gaan we de Startup.cs klasse in de API en voegen we het onderstaande stukje code toe aan de ConfigureServices() methode:
+1.	Hiervoor gaan we de `Startup.cs` klasse in de API en voegen we het onderstaande stukje code toe aan de `ConfigureServices()` methode:
 ```csharp
 services.AddCors(options =>
             {
@@ -69,14 +69,14 @@ services.AddCors(options =>
                 });
             });
 ```
-2.	In de Configure() methode in dezelfde klasse voegen we het volgende stukje code toe:
+2.	In de `Configure()` methode in dezelfde klasse voegen we het volgende stukje code toe:
 ```csharp
 app.UseCors("AllowSpecificOrigin");
 ```
 
 ### Testen connectie
-Als alles goed is gegaan, kunnen de Web en de API nu communiceren. Dit kunnen we testen door de automatisch gecreëerde ValuesController.cs in de API vanuit de Web aan te roepen.
-1.	We kunnen in de automatisch gecreëerde home component dit doen. Ga naar de file home.component.ts in de WEB (Web/src/app/home) en vervang de code met het onderstaande:
+Als alles goed is gegaan, kunnen de Web en de API nu communiceren. Dit kunnen we testen door de automatisch gecreëerde `ValuesController.cs` in de API vanuit de Web aan te roepen.
+1.	We kunnen in de automatisch gecreëerde home component dit doen. Ga naar de `file home.component.ts` in de WEB (`Web/src/app/home`) en vervang de code met het onderstaande:
 
 **LET OP:** Vervang de url met de url van de API in jouw betreffende applicatie!
 ```typescript
@@ -100,23 +100,23 @@ export class HomeComponent {
 }
 ```
 
-2.	En in de home.component.html vervangen we de code door het volgende:
+2.	En in de `home.component.html` vervangen we de code door het volgende:
 ```html
 <h1>{{ values }}</h1>
 ```
-We kunnen nu het programma runnen (API + WEB) en zullen de values (“value1, value2”) vanuit de ValuesController uit de API in de home component zien 😊.
+We kunnen nu het programma runnen (API + WEB) en zullen de values (`value1, value2`) vanuit de `ValuesController` uit de API in de home component zien 😊.
 
 
 ### Injection token voor API_BASE_URL
 We kunnen de url voor de API het beste via injection token ophalen, omdat de API url geen runtime representation heeft (hij heeft in de azure omgeving een andere waarde dan in de local omgeving).
-1.	Hiervoor voegen we een nieuwe folder injection-tokens aan onze angular web app toe met daarin de file api-base-url-token.ts. Deze typescript file ziet er als volgt uit:
+1.	Hiervoor voegen we een nieuwe folder `injection-tokens` aan onze angular web app toe met daarin de file `api-base-url-token.ts`. Deze typescript file ziet er als volgt uit:
 ```typescript
 import { InjectionToken } from '@angular/core';
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 ```
 Configservice & configDto
-2.	Hierna maken we in de src/app een nieuwe map genaamd services aan, en maken hierin een service genaamd config.service.ts. Deze service ziet er als volgt uit:
+2.	Hierna maken we in de `src/app` een nieuwe map genaamd `services` aan, en maken hierin een service genaamd `config.service.ts`. Deze service ziet er als volgt uit:
 ```typescript
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -175,13 +175,13 @@ export class ConfigService {
   }
 }
 ```
-3.	We moeten ook een config.dto aanmaken. Maak in de src/app een map genaamd dto aan en maak hierin de file config.dto.ts. Deze ziet er als volgt uit:
+3.	We moeten ook een `config.dto` aanmaken. Maak in de `src/app` een map genaamd `dto` aan en maak hierin de file `config.dto.ts`. Deze ziet er als volgt uit:
 ```typescript
 export interface ConfigDto {
   apiServerUrl: string;
 }
 ```
-4.	Vervolgens voegen we in de app.module.ts twee functies toe:
+4.	Vervolgens voegen we in de `app.module.ts` twee functies toe:
 ```typescript
 export function init(configService: ConfigService): Function {
   return () => {
@@ -194,7 +194,7 @@ export function getApiBaseUrlFactory(configService: ConfigService) {
   return configService.getCachedConfig().apiServerUrl;
 }
 ```
-Ook voegen we in de app.module.ts onder providers het volgende toe: 
+Ook voegen we in de `app.module.ts` onder `providers` het volgende toe: 
 ```typescript
 providers: [
     ConfigService,
@@ -214,7 +214,7 @@ providers: [
 
 
 ### ConfigController
-We moeten nu in de Controllers map in de Web een C# controller toevoegen en een C# klasse waarvan de properties gelijk zijn aan de ConfigDto die we in de vorige stap hebben gemaakt. 
+We moeten nu in de Controllers map in de Web een C# controller toevoegen en een C# klasse waarvan de properties gelijk zijn aan de `ConfigDto` die we in de vorige stap hebben gemaakt. 
 1.	De controller ziet er als volgt uit: 
 ```csharp
 [Route("api/Config")]
@@ -237,7 +237,7 @@ We moeten nu in de Controllers map in de Web een C# controller toevoegen en een 
         }
     }
 ```
-2.	Maak in de Web solution een map aan genaamd ‘DTO’ en voeg hier de ConfigDto klasse toe. De ConfigDto class ziet er als volgt uit:
+2.	Maak in de Web solution een map aan genaamd `DTO` en voeg hier de `ConfigDto` klasse toe. De `ConfigDto` class ziet er als volgt uit:
 ```csharp
 public class ConfigDto
     {
@@ -245,11 +245,14 @@ public class ConfigDto
     }
 }
 ```
-**LET OP:** in projecten die .NET Core 3.0+ gebruik maken moet je bij deze property een getter en setter aanmaken  public string ApiServerUrl {get; set;}
+**LET OP:** in projecten die .NET Core 3.0+ gebruik maken moet je bij deze property een getter en setter aanmaken:
+```csharp
+public string ApiServerUrl { get; set; }
+```
 
 
 ### Testen nieuwe connectie
-We hebben er nu voor gezorgd dat de web de url van api kan ophalen via ConfigController, config-service en de injection token. We kunnen dit nu gaan testen door onze home component hier op aan te passen. Verander de home.component.ts file zodat hij er als volgt uit ziet. 
+We hebben er nu voor gezorgd dat de web de url van api kan ophalen via `ConfigController`, `config-service` en de injection token. We kunnen dit nu gaan testen door onze home component hier op aan te passen. Verander de `home.component.ts` file zodat hij er als volgt uit ziet. 
 ```typescript
 import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
